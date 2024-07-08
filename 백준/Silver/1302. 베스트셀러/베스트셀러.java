@@ -1,5 +1,7 @@
 import java.io.*;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Main {
     private static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -8,43 +10,27 @@ public class Main {
     public static void main(String[] args) throws IOException {
         int N = Integer.parseInt(br.readLine());
 
-        String[] sales = new String[N];
+        Map<String,Integer> sales = new HashMap<String,Integer>();
 
         for (int i = 0; i < N; i++) {
-            sales[i] = br.readLine();
+            String title = br.readLine();
+            sales.put(title,sales.getOrDefault(title,0)+1);
         }
 
-        //1. 구매도서 정렬
-        Arrays.sort(sales);
+        String maxTitle="";
+        int maxCount = 0;
 
-        //2. 최대 구매 수량 저장
-        int count = 1;
-        int maxCount = 1;
-        String maxBook = sales[0];
+        for(Map.Entry<String,Integer> entry : sales.entrySet()) {
+            String titleName = entry.getKey();
+            int count = entry.getValue();
 
-        for (int i = 1; i < N; i++) {
-            if (sales[i].equals(sales[i - 1])) {
-                count++;
-            } else {
-                if (maxCount == count && maxBook.compareTo(sales[i - 1]) > 0) {
-                    maxBook = sales[i - 1];
-                } else if (maxCount < count) {
-                    maxCount = count;
-                    maxBook = sales[i - 1];
-                }
-                count = 1;
+            if(count > maxCount || (count == maxCount && titleName.compareTo(maxTitle)<0)){
+                maxTitle = titleName;
+                maxCount = count;
             }
         }
 
-        //마지막 원소처리
-        if (maxCount == count && maxBook.compareTo(sales[N - 1]) > 0) {
-            maxBook = sales[N - 1];
-        } else if (maxCount < count) {
-            maxCount = count;
-            maxBook = sales[N - 1];
-        }
-
-        bw.write(maxBook);
+        bw.write(maxTitle);
         bw.close();
     }
 }
