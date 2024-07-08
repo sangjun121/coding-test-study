@@ -9,25 +9,26 @@ public class Main {
         int N = Integer.parseInt(br.readLine());
 
         String[] dotsString = br.readLine().split(" ");
-        Integer[] dots = new Integer[N];
-        Map<String, Integer> dotsMap = new HashMap<>();
+        int[] dots = new int[N];
+        Set<Integer> dotsSet = new TreeSet<Integer>();
 
-        for (int i = 0; i < N; i++) { //nlog(n)
-            dotsMap.put(dotsString[i], 0);
+        for (int i = 0; i < N; i++) { //nlogn
             dots[i] = Integer.parseInt(dotsString[i]);
+            dotsSet.add(dots[i]);
         }
 
-        Set<Integer> dotsSet = new HashSet<Integer>(Arrays.asList(dots)); //중복제거
-        dots = dotsSet.toArray(new Integer[dotsSet.size()]);
-        Arrays.sort(dots); //정렬 nlogn
+        Map<Integer, Integer> dotsMap = new HashMap<>();
+        int idx = 0;
 
-        for(int i = 0; i < dots.length; i++) { //nlogn
-            dotsMap.put(dots[i].toString(), i);
+        for (int x : dotsSet) {
+            dotsMap.put(x, idx);
+            idx++;
         }
 
-        for(int i = 0; i < N; i++) { //출력
-            bw.write(dotsMap.get(dotsString[i]).toString()+" ");
+        for (int i = 0; i < N; i++) {
+            bw.write(dotsMap.get(dots[i]) + " ");
         }
+
         bw.close();
     }
 }
